@@ -8,8 +8,8 @@ client = Twitter::REST::Client.new do |config|
 end
 
 def tweet_wouf(client)
-	client.search('chien').take(5).each do |tweet|
-		if not tweet.text.include? "RT"
+	client.search('chien').take(10).each do |tweet|
+		if ((!tweet.text.include? "RT") && (!tweet.user.screen_name.include? "chien") && (tweet.lang == 'fr'))
 			client.update('@'+tweet.user.screen_name+' wouf', in_reply_to_status_id: tweet.id)
 		end
 	end
@@ -27,8 +27,8 @@ def every_so_many_seconds(seconds)
 end
 
 every_so_many_seconds(30) do
-  puts Time.now
   tweet_wouf(client)
+  puts Time.now
 end
 
 puts 'Err !'
