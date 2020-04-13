@@ -1,5 +1,7 @@
 require 'twitter'
 
+puts "-------DEMARRAGE DU BOT WOUF-------"
+
 client = Twitter::REST::Client.new do |config|
 	config.consumer_key = "JgcW9EPLNvwsPvJHcmQG3rMHW"
 	config.consumer_secret = "zoyV2zpMaa4m4HoVGZFlJTSPpoMMlZaUM5PzaaoBVhP2DUGYSL"
@@ -7,10 +9,16 @@ client = Twitter::REST::Client.new do |config|
 	config.access_token_secret = "Y6pHXBxFGkCKYpViejLIhnysIxDVLFIAYDCwvyTkIgprh"
 end
 
+puts "Connexion au compte réussi :)"
+
 def tweet_wouf(client)
 	client.search('chien').take(10).each do |tweet|
+		i = 0
 		if ((!tweet.text.include? "RT") && (!tweet.user.screen_name.include? "chien") && (tweet.lang == 'fr'))
 			client.update('@'+tweet.user.screen_name+' wouf', in_reply_to_status_id: tweet.id)
+			puts "Tweeted at "+ Time.now.to_s
+			i = i+1
+			break if i == 5
 		end
 	end
 end
@@ -26,9 +34,8 @@ def every_so_many_seconds(seconds)
   end
 end
 
-every_so_many_seconds(30) do
+every_so_many_seconds(60) do
   tweet_wouf(client)
-  puts Time.now
 end
 
 puts 'Err !'
