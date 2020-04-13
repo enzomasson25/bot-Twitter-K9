@@ -3,5 +3,5 @@
 ## What it is ? 
 This is a twitter bot made by love who'll bark if you tweet 'chien' (dog in french)
 
-## Current problem
-The bot get suspended for spamming. I have to find the maximum of tweets per minute wihtout getting suspended.
+## Feature to do 
+Respond with a picture of a dog with someone respond to my tweet or @ me
