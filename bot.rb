@@ -10,21 +10,29 @@ client = Twitter::REST::Client.new do |config|
 end
 
 puts "Connexion au compte réussi :)"
-
-def tweet_wouf(client)
-	client.search('chien').take(10).each do |tweet|
-		i = 0
-		if ((!tweet.text.include? "RT") && (!tweet.user.screen_name.include? "chien") && (tweet.lang == 'fr'))
+tab_tweet = []
+def tweet_wouf(client,tab_tweet)
+	client.search('wouf').take(1).each do |tweet|
+		if ((!tweet.text.include? "RT") && (!tweet.user.screen_name.include? "wouf") && (tweet.lang == 'fr') && (!tab_tweet.include?(tweet.id)))
 			client.update('@'+tweet.user.screen_name+' wouf', in_reply_to_status_id: tweet.id)
+			tab_tweet << tweet.id
 			puts "Tweeted at "+ Time.now.to_s
-			i = i+1
-			break if i == 5
+			break
 		end
 	end
 end
 
-def respond_with_media(client)
-	#TODO
+def respond_with_media(client,tab_tweet)
+	client.search('@WoufBot').take(1).each do |tweet|
+		if ((!tweet.text.include? "RT") && (!tab_tweet.include?(tweet.id)))
+			media = "C:\\Users\\33762\\Desktop\\code\\ruby\\botTwitter\\img\\"
+			media = media + rand(47).to_s + ".png"
+			client.update_with_media('@'+tweet.user.screen_name+' Wouf', media, in_reply_to_status_id: tweet.id)
+			tab_tweet << tweet.id
+			puts "Tweeted with media at "+ Time.now.to_s
+			break
+		end
+	end
 end
 
 def every_so_many_seconds(seconds)
@@ -38,8 +46,9 @@ def every_so_many_seconds(seconds)
   end
 end
 
-every_so_many_seconds(60) do
-  tweet_wouf(client)
+every_so_many_seconds(15) do
+   tweet_wouf(client,tab_tweet)
+   respond_with_media(client,tab_tweet)
 end
 
 puts 'Err !'
