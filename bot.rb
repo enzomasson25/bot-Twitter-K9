@@ -26,7 +26,7 @@ def respond_with_media(client,tab_tweet)
 	client.search('@WoufBot').take(1).each do |tweet|
 		if ((!tweet.text.include? "RT") && (!tab_tweet.include?(tweet.id)))
 			media = "img/"
-			media = media + rand(47).to_s + ".png"
+			media = media + rand(48).to_s + ".png"
 			client.update_with_media('@'+tweet.user.screen_name+' Wouf', media, in_reply_to_status_id: tweet.id)
 			tab_tweet << tweet.id
 			puts "Tweeted with media at "+ Time.now.to_s
